@@ -1,9 +1,6 @@
-# main.py
-# This is the entry point for the Snake game.
-
+import pygame
 from game import Game
 
-if __name__ == "__main__":
-    # TODO: Consider adding a more robust game manager or orchestrator here if the game grows.
+if __name__ == '__main__':
     snake_game = Game()
     snake_game.run()

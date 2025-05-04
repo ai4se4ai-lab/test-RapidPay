@@ -2,7 +2,7 @@
 # This file handles Pygame initialization and rendering functions.
 
 import pygame
-from config import DISPLAY_WIDTH, DISPLAY_HEIGHT, WHITE, GREEN, RED
+from config import DISPLAY_WIDTH, DISPLAY_HEIGHT, SNAKE_BLOCK_SIZE, BLUE, GREEN, RED
 
 def initialize_display():
     pygame.init()
