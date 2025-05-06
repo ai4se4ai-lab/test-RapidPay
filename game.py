@@ -5,11 +5,13 @@ import random
 pygame.init()
 
 # Define colors
+# FIXME: Using direct color tuples (magic values) makes it harder to manage and understand.
+# Consider using a dedicated color management system or constants in a config file.
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
-BLUE = (0, 0, 255)
+BLUE = (0, 0, 255) # NOTE: This color is defined but not currently used (dead code?). Consider removing it.
 
 class Snake:
     def __init__(self, grid_size, width, height):
@@ -18,7 +20,7 @@ class Snake:
         self.height = height
         self.body = [(width // 2, height // 2)]  # Initial snake position (list of coordinates)
         self.direction = (1, 0)  # Initial direction: right
-        self.color = GREEN
+        self.color = GREEN # FIXME: Color is hardcoded within the Snake class. Consider allowing external configuration.
         self.grow_snake = False
 
     def move(self):
@@ -35,6 +37,7 @@ class Snake:
     def change_direction(self, new_direction):
         if (new_direction[0] * -1, new_direction[1] * -1) != self.direction:
             self.direction = new_direction
+        # TODO: Add input validation to prevent immediate 180-degree turns, which are usually not allowed in Snake games.
 
     def draw(self, surface):
         for segment in self.body:
@@ -59,12 +62,14 @@ class Food:
         self.width = width
         self.height = height
         self.position = self.place_randomly()
-        self.color = RED
+        self.color = RED # FIXME: Color is hardcoded within the Food class. Consider allowing external configuration.
 
     def place_randomly(self):
         x = random.randrange(0, self.width // self.grid_size) * self.grid_size
         y = random.randrange(0, self.height // self.grid_size) * self.grid_size
         return (x, y)
+        # OPTIMIZE: The random placement might occasionally place food directly on the snake.
+        # Consider implementing a check to avoid this.
 
     def draw(self, surface):
         pygame.draw.rect(surface, self.color, (self.position[0], self.position[1], self.grid_size, self.grid_size))
@@ -72,9 +77,9 @@ class Food:
 class Game:
     def __init__(self, width=600, height=480, grid_size=20):
         pygame.init()
-        self.width = width
-        self.height = height
-        self.grid_size = grid_size
+        self.width = width # NOTE: Width and height are hardcoded as default arguments. Consider making them more easily configurable.
+        self.height = height # NOTE: Width and height are hardcoded as default arguments. Consider making them more easily configurable.
+        self.grid_size = grid_size # FIXME: Grid size is hardcoded. Changing it after initialization might break things.
         self.display = pygame.display.set_mode((self.width, self.height))
         pygame.display.set_caption("Snake Game")
         self.clock = pygame.time.Clock()
@@ -87,6 +92,8 @@ class Game:
             self.food.position = self.food.place_randomly()
             if self.food.position not in self.snake.body:
                 break
+        # NOTE: This simple food placement doesn't consider edge cases where the snake might occupy almost the entire screen,
+        # potentially leading to an infinite loop.
 
     def run(self):
         running = True
@@ -114,14 +121,15 @@ class Game:
 
             if self.snake.check_collision():
                 running = False
-                print(f"Game Over! Score: {self.score}")
+                print(f"Game Over! Score: {self.score}") # TODO: Implement a proper game over screen with options to restart or quit.
 
-            self.display.fill(BLACK)
+            self.display.fill(BLACK) # FIXME: Using a hardcoded color here. Should use a constant.
             self.food.draw(self.display)
             self.snake.draw(self.display)
             pygame.display.flip()
 
-            self.clock.tick(10)  # Control the game speed
+            # FIXME: Game speed is hardcoded. Should be configurable, perhaps based on score or difficulty level.
+            self.clock.tick(5) # HACK: Low frame rate for simplicity. Increase for smoother gameplay.
 
         pygame.quit()
 
